@@ -364,3 +364,4 @@ __pycache__/
 *.un~
 *~
 tags
+Session.vim

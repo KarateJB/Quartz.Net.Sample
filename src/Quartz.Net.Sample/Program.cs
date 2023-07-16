@@ -5,6 +5,8 @@ using Quartz.Net.Sample.Services;
 using Quartz.Net.Sample.Utils.Constants;
 using NLog;
 using NLog.Web;
+using Microsoft.Extensions.Configuration;
+using Quartz.Net.Sample.Models.Config;
 
 namespace Quartz.Net.Sample;
 public class Program
@@ -56,6 +58,19 @@ public class Program
                 logging.ClearProviders();
                 logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
             })
+            .ConfigureAppConfiguration((context, config) =>
+                    {
+                        config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", optional: true)
+                        .AddEnvironmentVariables();
+                    })
+        .ConfigureServices((hostContext, services) =>
+                {
+                    // Inject configurations
+                    services.AddOptions();
+                    services.Configure<AppSetting>(hostContext.Configuration);
+
+                })
         .UseNLog();
 
         return await Task.FromResult(hostBuilder);
