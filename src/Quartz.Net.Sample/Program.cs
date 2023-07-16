@@ -4,30 +4,47 @@ using Microsoft.Extensions.Logging;
 using Quartz.Net.Sample.Services;
 using Quartz.Net.Sample.Utils.Constants;
 using NLog;
+using NLog.Web;
 
 namespace Quartz.Net.Sample;
 public class Program
 {
     public static async Task Main(string[] args)
     {
-        if (args.Length > 0 && args[0].Equals("-i"))
+        // var logger = LogManager.GetCurrentClassLogger();
+        var logger = LogManager.Setup().LoadConfigurationFromFile("NLog.config").GetCurrentClassLogger();
+        logger.Debug($"Program started at {DateTime.Now.ToString()}...");
+
+        try
         {
-            Environment.SetEnvironmentVariable(EnvConstants.InteractiveMode, "1");
-            var host = (await CreateHostBuilderAsync(args, isInteractive: true)).Build();
-            using (var scope = host.Services.CreateScope())
+            if (args.Length > 0 && args[0].Equals("-i"))
             {
-                var ia = scope.ServiceProvider.GetRequiredService<IInteractiveMode>();
-                if (await ia.PromptAsync())
+                Environment.SetEnvironmentVariable(EnvConstants.InteractiveMode, "1");
+                var host = (await CreateHostBuilderAsync(args, isInteractive: true)).Build();
+                using (var scope = host.Services.CreateScope())
                 {
-                    Environment.Exit(0);
+                    var ia = scope.ServiceProvider.GetRequiredService<IInteractiveMode>();
+                    if (await ia.PromptAsync())
+                    {
+                        Environment.Exit(0);
+                    }
                 }
+                // host.Run();
             }
-            // host.Run();
+            else
+            {
+                Environment.SetEnvironmentVariable(EnvConstants.InteractiveMode, "0");
+                (await CreateHostBuilderAsync(args)).Build().Run();
+            }
         }
-        else
+        catch (System.Exception ex)
         {
-            Environment.SetEnvironmentVariable(EnvConstants.InteractiveMode, "0");
-            (await CreateHostBuilderAsync(args)).Build().Run();
+            logger.Error(ex);
+            throw;
+        }
+        finally
+        {
+            LogManager.Shutdown();
         }
     }
 
@@ -38,7 +55,8 @@ public class Program
             {
                 logging.ClearProviders();
                 logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-            });
+            })
+        .UseNLog();
 
         return await Task.FromResult(hostBuilder);
     }
