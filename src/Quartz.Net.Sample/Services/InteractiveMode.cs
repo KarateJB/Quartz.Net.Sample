@@ -1,3 +1,10 @@
+using System.ComponentModel;
+using System.Reflection;
+using Microsoft.Extensions.Logging;
+using Quartz.Net.Sample.Models.DTO;
+using Spectre.Console;
+using static Quartz.Net.Sample.IServiceCollectionExtensions;
+
 namespace Quartz.Net.Sample.Services;
 
 public class InteractiveMode : IInteractiveMode
@@ -13,10 +20,9 @@ public class InteractiveMode : IInteractiveMode
     public InteractiveMode(
             ILogger<InteractiveMode> logger,
             ISchedulerFactory schedulerFactory,
-            IMyTaskServiceResolver myTaskServiceResolver)
+            MyTaskResolver myTaskResolve)
     {
         this.logger = logger;
-        this.fpService = fpService;
 
         // Quartz scheduler
         this.scheduler = schedulerFactory.GetScheduler().Result;
@@ -25,7 +31,7 @@ public class InteractiveMode : IInteractiveMode
         this.jobMenus = this.GetJobImplementations();
 
         // Other injected services
-        this.myTask = myTaskServiceResolver(nameof(MyTaskService)) as MyTaskService;
+        this.myTask = myTaskResolve(nameof(MyTaskService)) as MyTaskService;
     }
 
     public async Task<bool> PromptAsync()
