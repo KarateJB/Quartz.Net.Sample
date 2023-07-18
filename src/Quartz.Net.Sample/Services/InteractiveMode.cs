@@ -3,7 +3,7 @@ using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Quartz.Net.Sample.Models.DTO;
 using Spectre.Console;
-using static Quartz.Net.Sample.IServiceCollectionExtensions;
+using static Quartz.Net.Sample.Utils.Extensions.IServiceCollectionExtensions;
 
 namespace Quartz.Net.Sample.Services;
 
