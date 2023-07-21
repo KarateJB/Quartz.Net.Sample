@@ -1,19 +1,19 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog.Web;
+using NLog;
+using Quartz.Net.Sample.Models.Config;
 using Quartz.Net.Sample.Services;
 using Quartz.Net.Sample.Utils.Constants;
-using NLog;
-using NLog.Web;
-using Microsoft.Extensions.Configuration;
-using Quartz.Net.Sample.Models.Config;
+using Quartz.Net.Sample.Utils.Extensions;
 
 namespace Quartz.Net.Sample;
 public class Program
 {
     public static async Task Main(string[] args)
     {
-        // var logger = LogManager.GetCurrentClassLogger();
         var logger = LogManager.Setup().LoadConfigurationFromFile("NLog.config").GetCurrentClassLogger();
         logger.Debug($"Program started at {DateTime.Now.ToString()}...");
 
@@ -53,10 +53,15 @@ public class Program
     public static async Task<IHostBuilder> CreateHostBuilderAsync(string[] args, bool isInteractive = false)
     {
         var hostBuilder = Host.CreateDefaultBuilder(args)
-            .ConfigureLogging(logging =>
+            .ConfigureLogging((context, logging) =>
             {
                 logging.ClearProviders();
-                logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                logging.AddConfiguration(context.Configuration.GetSection("Logging"));
+                logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
+                if (context.HostingEnvironment.IsDevelopment() && !isInteractive)
+                {
+                    logging.AddConsole();
+                }
             })
             .ConfigureAppConfiguration((context, config) =>
                     {
@@ -70,10 +75,22 @@ public class Program
                     services.AddOptions();
                     services.Configure<AppSetting>(hostContext.Configuration);
 
+                    // Inject services
+                    services.AddServices();
+
+                    services.AddQuartz(q =>
+                            {
+                                // Register an IJobFactory to create jobs from DI container.
+                                q.UseMicrosoftDependencyInjectionJobFactory();
+                                // Register the custom jobs.
+                                q.UseQuartzJobs(hostContext.Configuration);
+                            });
+
+                    // Add Quartz hosted service.
+                    services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
                 })
         .UseNLog();
 
         return await Task.FromResult(hostBuilder);
     }
 }
-

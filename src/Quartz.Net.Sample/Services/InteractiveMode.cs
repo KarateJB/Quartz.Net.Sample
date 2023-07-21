@@ -39,7 +39,7 @@ public class InteractiveMode : IInteractiveMode
         while (true)
         {
             var reply = AnsiConsole.Prompt(new SelectionPrompt<JobMenu>().HighlightStyle(new Style(foreground: Color.Green))
-                                .Title("[blue] Choose a task to be executed: [/]")
+                                .Title("[blue] Choose a task to execute: [/]")
                                 .AddChoices(this.jobMenus));
 
             switch (reply.Type)

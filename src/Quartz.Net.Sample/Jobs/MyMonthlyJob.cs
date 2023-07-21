@@ -14,7 +14,7 @@ public class MyMonthlyJob : IJob
     private readonly string jobClass = string.Empty;
     private readonly ILogger<MyMonthlyJob> logger;
     private readonly AppSetting appSetting;
-    private readonly HelloWorldService ts;
+    private readonly HelloVimService ts;
 
     public MyMonthlyJob(
             ILogger<MyMonthlyJob> logger,
@@ -24,7 +24,7 @@ public class MyMonthlyJob : IJob
         this.jobClass = nameof(MyMonthlyJob);
         this.logger = logger;
         this.appSetting = configuration.Value;
-        this.ts = taskResolver(nameof(HelloWorldService)) as HelloWorldService;
+        this.ts = taskResolver(nameof(HelloVimService)) as HelloVimService;
     }
 
     public async Task Execute(IJobExecutionContext context)
@@ -41,7 +41,8 @@ public class MyMonthlyJob : IJob
 
         try
         {
-
+            await this.ts.RunAsync();
+            isSuccess = true;
         }
         catch (System.Exception ex)
         {

@@ -13,6 +13,6 @@ run:
 				cd Quartz.Net.Sample/; \
 				dotnet run --project ./Quartz.Net.Sample.csproj --property:Configuration=Debug
 
-run-interative:
+run-interactive:
 				cd Quartz.Net.Sample/; \
 				dotnet run --project ./Quartz.Net.Sample.csproj --property:Configuration=Debug -- -i

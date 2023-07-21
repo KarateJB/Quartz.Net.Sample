@@ -5,6 +5,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <NoWarn>NU1803</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,9 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="NLog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+     <None Update="NLog.config" CopyToOutputDirectory="Always" />
   </ItemGroup>
-
 </Project>

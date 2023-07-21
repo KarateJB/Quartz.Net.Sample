@@ -41,7 +41,8 @@ public class MyDailyJob : IJob
 
         try
         {
-
+            await this.ts.RunAsync();
+            isSuccess = true;
         }
         catch (System.Exception ex)
         {

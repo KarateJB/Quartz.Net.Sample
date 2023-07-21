@@ -14,7 +14,7 @@ public class MyWeeklyJob : IJob
     private readonly string jobClass = string.Empty;
     private readonly ILogger<MyWeeklyJob> logger;
     private readonly AppSetting appSetting;
-    private readonly HelloWorldService ts;
+    private readonly HelloDotnetService ts;
 
     public MyWeeklyJob(
             ILogger<MyWeeklyJob> logger,
@@ -24,7 +24,7 @@ public class MyWeeklyJob : IJob
         this.jobClass = nameof(MyWeeklyJob);
         this.logger = logger;
         this.appSetting = configuration.Value;
-        this.ts = taskResolver(nameof(HelloWorldService)) as HelloWorldService;
+        this.ts = taskResolver(nameof(HelloDotnetService)) as HelloDotnetService;
     }
 
     public async Task Execute(IJobExecutionContext context)
@@ -41,7 +41,8 @@ public class MyWeeklyJob : IJob
 
         try
         {
-
+            await this.ts.RunAsync();
+            isSuccess = true;
         }
         catch (System.Exception ex)
         {
