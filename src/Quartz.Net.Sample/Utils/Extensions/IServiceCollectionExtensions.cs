@@ -18,8 +18,10 @@ public static class IServiceCollectionExtensions
                     return myTask;
                 });
 
-        // Inject various MyTask implementations.
-        services.AddSingleton<IMyTaskService, MyTaskService>();
+        // Inject various task implementations.
+        services.AddSingleton<IMyTaskService, HelloWorldService>();
+        services.AddSingleton<IMyTaskService, HelloVimService>();
+        services.AddSingleton<IMyTaskService, HelloDotnetService>();
         #endregion
 
         services.AddScoped<IInteractiveMode, InteractiveMode>();

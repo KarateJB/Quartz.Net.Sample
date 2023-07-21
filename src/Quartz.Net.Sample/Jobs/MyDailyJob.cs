@@ -14,7 +14,7 @@ public class MyDailyJob : IJob
     private readonly string jobClass = string.Empty;
     private readonly ILogger<MyDailyJob> logger;
     private readonly AppSetting appSetting;
-    private readonly MyTaskService ts;
+    private readonly HelloWorldService ts;
 
     public MyDailyJob(
             ILogger<MyDailyJob> logger,
@@ -24,7 +24,7 @@ public class MyDailyJob : IJob
         this.jobClass = nameof(MyDailyJob);
         this.logger = logger;
         this.appSetting = configuration.Value;
-        this.ts = taskResolver(nameof(MyTaskService)) as MyTaskService;
+        this.ts = taskResolver(nameof(HelloWorldService)) as HelloWorldService;
     }
 
     public async Task Execute(IJobExecutionContext context)

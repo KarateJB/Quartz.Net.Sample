@@ -31,7 +31,7 @@ public class InteractiveMode : IInteractiveMode
         this.jobMenus = this.GetJobImplementations();
 
         // Other injected services
-        this.myTask = myTaskResolve(nameof(MyTaskService)) as MyTaskService;
+        this.myTask = myTaskResolve(nameof(HelloWorldService)) as HelloWorldService;
     }
 
     public async Task<bool> PromptAsync()
