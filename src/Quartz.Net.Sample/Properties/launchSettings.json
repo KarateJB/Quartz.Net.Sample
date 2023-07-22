@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Quartz.Net.Sample": {
+      "commandName": "Project",
+      //"commandLineArgs": "-i",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT ": "Development"
+      }
+    }
+  }
+}

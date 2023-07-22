@@ -8,6 +8,7 @@ using Quartz.Net.Sample.Models.Config;
 using Quartz.Net.Sample.Services;
 using Quartz.Net.Sample.Utils.Constants;
 using Quartz.Net.Sample.Utils.Extensions;
+using NLog.Targets;
 
 namespace Quartz.Net.Sample;
 public class Program
@@ -53,11 +54,14 @@ public class Program
     public static async Task<IHostBuilder> CreateHostBuilderAsync(string[] args, bool isInteractive = false)
     {
         var hostBuilder = Host.CreateDefaultBuilder(args)
+            .UseEnvironment(Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Development")
             .ConfigureLogging((context, logging) =>
             {
                 logging.ClearProviders();
                 logging.AddConfiguration(context.Configuration.GetSection("Logging"));
                 logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
+
+                Console.WriteLine($"Current environment: {context.HostingEnvironment.EnvironmentName}");
                 if (context.HostingEnvironment.IsDevelopment() && !isInteractive)
                 {
                     logging.AddConsole();

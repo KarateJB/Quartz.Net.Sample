@@ -21,6 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
+     <None Update="appsettings.json" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+  <ItemGroup>
+     <None Update="appsettings.Development.json" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+  <ItemGroup>
      <None Update="NLog.config" CopyToOutputDirectory="Always" />
   </ItemGroup>
 </Project>
