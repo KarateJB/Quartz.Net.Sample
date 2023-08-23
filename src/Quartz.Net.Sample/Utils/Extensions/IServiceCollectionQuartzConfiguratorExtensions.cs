@@ -10,6 +10,13 @@ public static class IServiceCollectionQuartzConfiguratorExtensions
     {
         var jobName = string.Empty;
 
+        #region Testing Quartz Trigger
+#if DEBUG
+        var mockCurrentDateTime = configuration["Mock:CurrentDateTime"];
+        SystemTime.UtcNow = () => new DateTime(mockCurrentDateTime);
+#endif
+        #endregion
+
         #region Add job and trigger
 
         quartz.AddJobAndTrigger<MyDailyJob>(configuration);
