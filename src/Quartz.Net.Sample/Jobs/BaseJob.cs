@@ -1,18 +1,16 @@
-using System.ComponentModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Quartz.Net.Sample.Models.Config;
-using Quartz.Net.Sample.Services;
-using static Quartz.Net.Sample.Utils.Extensions.IServiceCollectionExtensions;
+using Quartz.Net.Sample.Models.DTO;
 
 namespace Quartz.Net.Sample.Jobs;
 
 public class BaseJob<T>
 {
     protected readonly string jobClass = string.Empty;
-    protected readonly ILogger<MyDailyJob> logger;
+    protected readonly ILogger<T> logger;
     protected readonly AppSetting appSetting;
-    protected readonly JobResult jobResult = null;
+    protected JobResult jobResult = null;
 
     public BaseJob(
             ILogger<T> logger,
@@ -39,7 +37,7 @@ public class BaseJob<T>
 
         try
         {
-            jobAction();
+            jobAction(this.jobResult);
             this.jobResult.IsSuccess = true;
         }
         catch (System.Exception ex)

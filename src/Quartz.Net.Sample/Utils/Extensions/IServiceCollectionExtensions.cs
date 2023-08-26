@@ -22,6 +22,7 @@ public static class IServiceCollectionExtensions
         services.AddSingleton<IMyTaskService, HelloWorldService>();
         services.AddSingleton<IMyTaskService, HelloVimService>();
         services.AddSingleton<IMyTaskService, HelloDotnetService>();
+        services.AddSingleton<IMyTaskService, SampleService>();
         #endregion
 
         services.AddScoped<IInteractiveMode, InteractiveMode>();

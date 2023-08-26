@@ -8,7 +8,7 @@ public class JobResult
     public bool IsSuccess { get; set; } = false;
 
     /// <summary>
-    /// Executed result
+    /// Executed result, like affected row count or return object
     /// </summary>
-    public object ExecutedResult { get; set; }
+    public object? ExecutedResult { get; set; }
 }
