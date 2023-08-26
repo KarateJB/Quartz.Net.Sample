@@ -2,6 +2,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Quartz.Net.Sample.Models.Config;
 using Quartz.Net.Sample.Models.DTO;
+using Quartz.Net.Sample.Services;
+using Quartz.Net.Sample.Utils.Constants;
 
 namespace Quartz.Net.Sample.Jobs;
 
@@ -9,15 +11,18 @@ public class BaseJob<T>
 {
     protected readonly string jobClass = string.Empty;
     protected readonly ILogger<T> logger;
+    protected readonly IInteractiveMode im;
     protected readonly AppSetting appSetting;
     protected JobResult jobResult = null;
 
     public BaseJob(
             ILogger<T> logger,
+            IInteractiveMode im,
             IOptions<AppSetting> configuration)
     {
-        this.jobClass = nameof(T);
+        this.jobClass = typeof(T).Name;
         this.logger = logger;
+        this.im = im;
         this.appSetting = configuration.Value;
     }
 
@@ -49,7 +54,13 @@ public class BaseJob<T>
         finally
         {
             var msg = genMsgFunc();
+            // Logging
             this.logger.LogInformation(msg);
+            // stdout (interactive mode)
+            if (Environment.GetEnvironmentVariable(EnvConstants.InteractiveMode) == EnvConstants.True)
+            {
+                await this.im.ConsoleLogAsync(msg, IsSuccess ? Models.Enums.Colors.Yellow : Models.Enums.Colors.Red);
+            }
         }
     }
 

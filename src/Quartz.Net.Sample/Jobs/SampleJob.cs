@@ -3,26 +3,30 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Quartz.Net.Sample.Models.Config;
 using Quartz.Net.Sample.Services;
+using Quartz.Net.Sample.Utils.Constants;
 using static Quartz.Net.Sample.Utils.Extensions.IServiceCollectionExtensions;
 
 namespace Quartz.Net.Sample.Jobs;
 
 [DisallowConcurrentExecution]
-[Description("My Weekly Job")]
+[Description("Scheduled job demo")]
 public class SampleJob : IJob
 {
     private readonly string jobClass = string.Empty;
     private readonly ILogger<SampleJob> logger;
+    private readonly IInteractiveMode im;
     private readonly AppSetting appSetting;
     private readonly SampleService ts;
 
     public SampleJob(
             ILogger<SampleJob> logger,
+            IInteractiveMode im,
             IOptions<AppSetting> configuration,
             MyTaskResolver taskResolver)
     {
         this.jobClass = nameof(SampleJob);
         this.logger = logger;
+        this.im = im;
         this.appSetting = configuration.Value;
         this.ts = taskResolver(nameof(SampleService)) as SampleService;
     }
@@ -47,12 +51,19 @@ public class SampleJob : IJob
         catch (System.Exception ex)
         {
             isSuccess = false;
-            this.logger.LogError($"{jobClass} failed. {ex.Message}");
+            this.logger.LogError($"\"{jobClass}\" failed. {ex.Message}");
             throw new Quartz.JobExecutionException(msg: $"Start retrying {jobClass}", cause: ex, refireImmediately: true);
         }
         finally
         {
-            this.logger.LogInformation($"{jobClass} {(isSuccess ? "succeeded" : "failed")}");
+            var msg = $"\"{jobClass}\" {(isSuccess ? "succeeded" : "failed")}";
+            // Logging
+            this.logger.LogInformation(msg);
+            // stdout (interactive mode)
+            if (Environment.GetEnvironmentVariable(EnvConstants.InteractiveMode) == EnvConstants.True)
+            {
+                await this.im.ConsoleLogAsync(msg, isSuccess ? Models.Enums.Colors.Yellow : Models.Enums.Colors.Red);
+            }
         }
     }
 }

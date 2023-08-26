@@ -16,8 +16,9 @@ public class MyDailyJob : BaseJob<MyDailyJob>, IJob
 
     public MyDailyJob(
             ILogger<MyDailyJob> logger,
+            IInteractiveMode im,
             IOptions<AppSetting> configuration,
-            MyTaskResolver taskResolver) : base(logger, configuration)
+            MyTaskResolver taskResolver) : base(logger, im, configuration)
     {
         this.ts = taskResolver(nameof(HelloWorldService)) as HelloWorldService;
     }
@@ -29,7 +30,7 @@ public class MyDailyJob : BaseJob<MyDailyJob>, IJob
             jobResult.ExecutedResult = await this.ts.RunAsync();
         };
 
-        Func<string> genMsg = () => $"{base.jobClass} {(base.IsSuccess ? "succeeded" : "failed")}";
+        Func<string> genMsg = () => $"\"{base.jobClass}\" {(base.IsSuccess ? "succeeded" : "failed")}";
 
         // Exectute
         await base.ExecuteAsync(context, doJob, genMsg);

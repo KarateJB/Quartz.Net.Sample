@@ -3,7 +3,6 @@ using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Quartz.Net.Sample.Models.DTO;
 using Spectre.Console;
-using static Quartz.Net.Sample.Utils.Extensions.IServiceCollectionExtensions;
 
 namespace Quartz.Net.Sample.Services;
 
@@ -12,15 +11,13 @@ public class InteractiveMode : IInteractiveMode
     private const bool ShutDown = true;
     private const string Quit = "Quit";
     private readonly ILogger<InteractiveMode> logger;
-    private readonly IMyTaskService myTask;
 
     private readonly IScheduler scheduler = null;
     private readonly IEnumerable<JobMenu> jobMenus = null;
 
     public InteractiveMode(
             ILogger<InteractiveMode> logger,
-            ISchedulerFactory schedulerFactory,
-            MyTaskResolver myTaskResolve)
+            ISchedulerFactory schedulerFactory)
     {
         this.logger = logger;
 
@@ -29,9 +26,6 @@ public class InteractiveMode : IInteractiveMode
 
         // Fetch the implementations (types) of Quartz.IJob
         this.jobMenus = this.GetJobImplementations();
-
-        // Other injected services
-        this.myTask = myTaskResolve(nameof(HelloWorldService)) as HelloWorldService;
     }
 
     public async Task<bool> PromptAsync()
@@ -50,10 +44,9 @@ public class InteractiveMode : IInteractiveMode
                     var jobKey = new JobKey(reply.Type.Name);
                     if (scheduler.CheckExists(jobKey).Result)
                     {
-                        AnsiConsole.MarkupLine($"[yellow]{DateTime.Now.ToString()} \"{reply.Type.Name}\" started, do not close this window...[/]");
                         await scheduler.Start();
                         await scheduler.TriggerJob(jobKey);
-                        AnsiConsole.MarkupLine($"[yellow]{DateTime.Now.ToString()} \"{reply.Type.Name}\" completed.\n\n[/]");
+                        AnsiConsole.MarkupLine($"[yellow]{DateTime.Now.ToString()} \"{reply.Type.Name}\" started, do not close this window until it is completed.[/]");
                     }
                     else
                     {
@@ -65,6 +58,12 @@ public class InteractiveMode : IInteractiveMode
 
             await Task.Delay(2000);
         }
+    }
+
+    public async Task ConsoleLogAsync(string msg, Models.Enums.Colors color)
+    {
+        AnsiConsole.MarkupLine($"[{color.ToString().ToLower()}]{DateTime.Now.ToString()} {msg}\n[/]");
+        await Task.Delay(500);
     }
 
     private IEnumerable<JobMenu> GetJobImplementations()

@@ -21,7 +21,6 @@ public static class IServiceCollectionQuartzConfiguratorExtensions
         {
             SystemTime.UtcNow = () => DateTime.Parse(mockOption.CurrentDateTime);
         }
-
         // Or simply use below.
         // SystemTime.UtcNow = () => new DateTime(2023, 08, 31, 02, 0, 0);
 #endif
@@ -29,6 +28,7 @@ public static class IServiceCollectionQuartzConfiguratorExtensions
 
         #region Add job and trigger
 
+        quartz.AddJobAndTrigger<SampleJob>(configuration);
         quartz.AddJobAndTrigger<MyDailyJob>(configuration);
         quartz.AddJobAndTrigger<MyWeeklyJob>(configuration);
         quartz.AddJobAndTrigger<MyMonthlyJob>(configuration);
