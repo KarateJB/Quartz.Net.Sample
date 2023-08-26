@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Quartz.Net.Sample.Jobs;
+using Quartz.Net.Sample.Models.Config;
 using Quartz.Net.Sample.Utils.Constants;
 
 namespace Quartz.Net.Sample.Utils.Extensions;
@@ -10,8 +11,24 @@ public static class IServiceCollectionQuartzConfiguratorExtensions
     {
         var jobName = string.Empty;
 
+        #region Testing Quartz Trigger
+#if DEBUG
+        // Mock system current time to test Trigger.
+        var mockOption = new MockOption();
+        configuration.Bind("Mock", mockOption);
+        var mockCurrentDateTime = mockOption.CurrentDateTime;
+        if (!string.IsNullOrEmpty(mockCurrentDateTime))
+        {
+            SystemTime.UtcNow = () => DateTime.Parse(mockOption.CurrentDateTime);
+        }
+        // Or simply use below.
+        // SystemTime.UtcNow = () => new DateTime(2023, 08, 31, 02, 0, 0);
+#endif
+        #endregion
+
         #region Add job and trigger
 
+        quartz.AddJobAndTrigger<SampleJob>(configuration);
         quartz.AddJobAndTrigger<MyDailyJob>(configuration);
         quartz.AddJobAndTrigger<MyWeeklyJob>(configuration);
         quartz.AddJobAndTrigger<MyMonthlyJob>(configuration);

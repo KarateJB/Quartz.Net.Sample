@@ -40,6 +40,17 @@ Open "src/Quartz.Net.Sample/appsettings.jon" and add the new Job's cron schedule
 > See [Cron Expression Generator & Explainer - Quartz](https://www.freeformatter.com/cron-expression-generator-quartz.html).
 
 
+## How to Test Trigger
+
+If you would like to test the trigger, mock the **SystemTime.UtcNow** like this:
+
+```cs
+SystemTime.UtcNow = () => new DateTime(2023, 08, 31, 02, 0, 0);
+```
+
+I put the mocking options in "appsettings.Development.json" and `IServiceCollectionQuartzConfiguratorExtensions.UseQuartzJobs()` shows how to mock the `SystemTime.UtcNow`.
+
+
 ## (Optional) Publish Linux Executable
 
 Run the command to publish the executable for Ubuntu:
