@@ -29,7 +29,7 @@ public class MyDailyJob : BaseJob<MyDailyJob>, IJob
             jobResult.ExecutedResult = await this.ts.RunAsync();
         };
 
-        Func<string> genMsg = () => $"{jobClass} {(base.IsSuccess ? "succeeded" : "failed")}";
+        Func<string> genMsg = () => $"{base.jobClass} {(base.IsSuccess ? "succeeded" : "failed")}";
 
         // Exectute
         await base.ExecuteAsync(context, doJob, genMsg);
