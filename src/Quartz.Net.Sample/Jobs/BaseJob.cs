@@ -28,9 +28,15 @@ public class BaseJob<T>
 
     public bool IsSuccess { get { return this.jobResult.IsSuccess; } }
 
-    public async Task ExecuteAsync(IJobExecutionContext context, Action<JobResult> jobAction, Func<string> genMsgFunc)
+    public async Task ExecuteAsync(IJobExecutionContext context, Func<JobResult, Task> jobAction, Func<string> genMsgFunc = null)
     {
         await this.cleanResultAsync();
+
+        // Initialize callback
+        if (genMsgFunc is null)
+        {
+            genMsgFunc = () => $"\"{this.jobClass}\" {(this.IsSuccess ? "succeeded" : "failed")}";
+        }
 
         #region Retry
         if (context.RefireCount > this.appSetting.Quartz.RetryMaxTimes)
@@ -42,7 +48,7 @@ public class BaseJob<T>
 
         try
         {
-            jobAction(this.jobResult);
+            await jobAction(this.jobResult);
             this.jobResult.IsSuccess = true;
         }
         catch (System.Exception ex)
