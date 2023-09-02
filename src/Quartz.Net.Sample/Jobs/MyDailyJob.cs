@@ -25,14 +25,12 @@ public class MyDailyJob : BaseJob<MyDailyJob>, IJob
 
     public async Task Execute(IJobExecutionContext context)
     {
-        Action<JobResult> doJob = async (jobResult) =>
+        Func<JobResult, Task> doJob = async (jobResult) =>
         {
             jobResult.ExecutedResult = await this.ts.RunAsync();
         };
 
-        Func<string> genMsg = () => $"\"{base.jobClass}\" {(base.IsSuccess ? "succeeded" : "failed")}";
-
         // Exectute
-        await base.ExecuteAsync(context, doJob, genMsg);
+        await base.ExecuteAsync(context, doJob);
     }
 }
