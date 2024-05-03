@@ -5,7 +5,8 @@
 .PHONY: publish
 
 build:
-				MSBuild.exe -clp:ErrorsOnly -nologo -m
+				# MSBuild.exe -clp:ErrorsOnly -nologo -m 
+				dotnet build --no-restore /clp:ErrorsOnly
 
 clean:
 				dotnet clean -nologo -consoleLoggerParameters:NoSummary -verbosity:quiet

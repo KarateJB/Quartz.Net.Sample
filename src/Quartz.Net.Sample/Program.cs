@@ -11,6 +11,7 @@ using Quartz.Net.Sample.Utils.Extensions;
 using NLog.Targets;
 
 namespace Quartz.Net.Sample;
+
 public class Program
 {
     public static async Task Main(string[] args)
