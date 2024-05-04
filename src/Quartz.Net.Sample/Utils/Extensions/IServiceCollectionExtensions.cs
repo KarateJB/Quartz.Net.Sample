@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using Quartz.Net.Sample.Services;
 
 namespace Quartz.Net.Sample.Utils.Extensions;

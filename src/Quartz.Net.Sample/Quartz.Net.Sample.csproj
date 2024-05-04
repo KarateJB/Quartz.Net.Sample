@@ -21,6 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="Microsoft.Extensions.Configuration" />
+    <Using Include="Microsoft.Extensions.DependencyInjection;" />
+    <Using Include="Microsoft.Extensions.Hosting;" />
+    <Using Include="Microsoft.Extensions.Logging;" />
+  </ItemGroup>
+
+  <ItemGroup>
      <None Update="appsettings.json" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <ItemGroup>

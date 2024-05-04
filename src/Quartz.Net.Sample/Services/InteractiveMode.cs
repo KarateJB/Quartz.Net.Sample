@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Reflection;
-using Microsoft.Extensions.Logging;
 using Quartz.Net.Sample.Models.DTO;
 using Spectre.Console;
 
