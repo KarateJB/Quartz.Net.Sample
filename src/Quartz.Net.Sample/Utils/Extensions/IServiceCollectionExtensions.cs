@@ -1,10 +1,8 @@
-using Quartz.Net.Sample.Services;
-
 namespace Quartz.Net.Sample.Utils.Extensions;
 
 public static class IServiceCollectionExtensions
 {
-    // public delegate IMyTaskService MyTaskResolver(string className);
+    public delegate IMyTaskService MyTaskResolver(string className);
 
     public static IServiceCollection AddServices(this IServiceCollection services)
     {

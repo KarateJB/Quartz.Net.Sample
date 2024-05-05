@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Configuration;
 using Quartz.Net.Sample.Jobs;
 using Quartz.Net.Sample.Models.Config;
 using Quartz.Net.Sample.Utils.Constants;
