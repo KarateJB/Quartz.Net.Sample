@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Logging;
-
 namespace Quartz.Net.Sample.Services;
 
 public class SampleService : IMyTaskService

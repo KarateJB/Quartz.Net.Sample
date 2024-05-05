@@ -1,9 +1,7 @@
 using System.ComponentModel;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Quartz.Net.Sample.Models.Config;
 using Quartz.Net.Sample.Models.DTO;
-using Quartz.Net.Sample.Services;
 using static Quartz.Net.Sample.Utils.Extensions.IServiceCollectionExtensions;
 
 namespace Quartz.Net.Sample.Jobs;
