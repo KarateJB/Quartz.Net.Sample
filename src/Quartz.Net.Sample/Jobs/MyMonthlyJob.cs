@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using Microsoft.Extensions.Options;
 using Quartz.Net.Sample.Models.Config;
 using Quartz.Net.Sample.Models.DTO;
 // using static Quartz.Net.Sample.Utils.Extensions.IServiceCollectionExtensions;
@@ -20,8 +19,8 @@ public class MyMonthlyJob : BaseJob<MyMonthlyJob>, IJob
             IOptions<AppSetting> configuration,
             [FromKeyedServices(nameof(HelloVimService))] IMyTaskService myTaskService) : base(logger, im, configuration)
     {
-        this.ts = serviceProvider.GetKeyedService<IMyTaskService>(nameof(HelloVimService)) as HelloVimService;
-        // this.ts = myTaskService as HelloVimService;
+        // this.ts = serviceProvider.GetKeyedService<IMyTaskService>(nameof(HelloVimService)) as HelloVimService;
+        this.ts = myTaskService as HelloVimService;
 
         // Old way: use Resolver
         // this.ts = taskResolver(nameof(HelloVimService)) as HelloVimService;

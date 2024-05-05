@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using Microsoft.Extensions.Options;
 using Quartz.Net.Sample.Models.Config;
 using Quartz.Net.Sample.Models.DTO;
 // using static Quartz.Net.Sample.Utils.Extensions.IServiceCollectionExtensions;
@@ -20,9 +19,8 @@ public class MyDailyJob : BaseJob<MyDailyJob>, IJob
             IOptions<AppSetting> configuration,
             [FromKeyedServices(nameof(HelloWorldService))] IMyTaskService myTaskService) : base(logger, im, configuration)
     {
-        // TODO: Inject service check
-        this.ts = serviceProvider.GetKeyedService<IMyTaskService>(nameof(HelloWorldService)) as HelloWorldService;
-        // this.ts = myTaskService as HelloWorldService;
+        // this.ts = serviceProvider.GetKeyedService<IMyTaskService>(nameof(HelloWorldService)) as HelloWorldService;
+        this.ts = myTaskService as HelloWorldService;
 
         // Old way: use Resolver
         // this.ts = taskResolver(nameof(HelloWorldService)) as HelloWorldService;
