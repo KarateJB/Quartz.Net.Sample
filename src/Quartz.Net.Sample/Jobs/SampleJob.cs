@@ -1,10 +1,7 @@
 using System.ComponentModel;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Quartz.Net.Sample.Models.Config;
-using Quartz.Net.Sample.Services;
 using Quartz.Net.Sample.Utils.Constants;
-using static Quartz.Net.Sample.Utils.Extensions.IServiceCollectionExtensions;
+// using static Quartz.Net.Sample.Utils.Extensions.IServiceCollectionExtensions;
 
 namespace Quartz.Net.Sample.Jobs;
 
@@ -19,16 +16,23 @@ public class SampleJob : IJob
     private readonly SampleService ts;
 
     public SampleJob(
+            // MyTaskResolver taskResolver,
             ILogger<SampleJob> logger,
+            IServiceProvider serviceProvider,
             IInteractiveMode im,
             IOptions<AppSetting> configuration,
-            MyTaskResolver taskResolver)
+            [FromKeyedServices(nameof(SampleService))] IMyTaskService myTaskService)
     {
         this.jobClass = nameof(SampleJob);
         this.logger = logger;
         this.im = im;
         this.appSetting = configuration.Value;
-        this.ts = taskResolver(nameof(SampleService)) as SampleService;
+
+        // this.ts = serviceProvider.GetKeyedService<IMyTaskService>(nameof(SampleService)) as SampleService;
+        // this.ts = myTaskService as SampleService;
+
+        // Old way: use Resolver
+        // this.ts = taskResolver(nameof(SampleService)) as SampleService;
     }
 
     public async Task Execute(IJobExecutionContext context)

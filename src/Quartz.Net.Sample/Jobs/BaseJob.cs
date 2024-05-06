@@ -1,8 +1,5 @@
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Quartz.Net.Sample.Models.Config;
 using Quartz.Net.Sample.Models.DTO;
-using Quartz.Net.Sample.Services;
 using Quartz.Net.Sample.Utils.Constants;
 
 namespace Quartz.Net.Sample.Jobs;

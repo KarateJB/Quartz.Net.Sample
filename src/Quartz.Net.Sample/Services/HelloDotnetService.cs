@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Logging;
-
 namespace Quartz.Net.Sample.Services;
 
 public class HelloDotnetService : IMyTaskService
@@ -14,6 +12,6 @@ public class HelloDotnetService : IMyTaskService
     public async Task<bool> RunAsync()
     {
         this.logger.LogInformation($"{nameof(HelloDotnetService)}: Hello, Dotnet!");
-        return true;
+        return await Task.FromResult(true);
     }
 }

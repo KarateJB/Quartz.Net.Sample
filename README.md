@@ -42,7 +42,7 @@ Open "src/Quartz.Net.Sample/appsettings.jon" and add the new Job's cron schedule
 
 ## How to Test Trigger
 
-If you would like to test the trigger, mock the **SystemTime.UtcNow** like this:
+To test the trigger, mock the **SystemTime.UtcNow** like this:
 
 ```cs
 SystemTime.UtcNow = () => new DateTime(2023, 08, 31, 02, 0, 0);

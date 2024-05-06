@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Logging;
-
 namespace Quartz.Net.Sample.Services;
 
 public class HelloVimService : IMyTaskService
@@ -14,6 +12,6 @@ public class HelloVimService : IMyTaskService
     public async Task<bool> RunAsync()
     {
         this.logger.LogInformation($"{nameof(HelloVimService)}: Hello, Vim!");
-        return true;
+        return await Task.FromResult(true);
     }
 }

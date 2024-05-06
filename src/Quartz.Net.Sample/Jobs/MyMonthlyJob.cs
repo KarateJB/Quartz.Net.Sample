@@ -1,10 +1,7 @@
 using System.ComponentModel;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Quartz.Net.Sample.Models.Config;
 using Quartz.Net.Sample.Models.DTO;
-using Quartz.Net.Sample.Services;
-using static Quartz.Net.Sample.Utils.Extensions.IServiceCollectionExtensions;
+// using static Quartz.Net.Sample.Utils.Extensions.IServiceCollectionExtensions;
 
 namespace Quartz.Net.Sample.Jobs;
 
@@ -15,12 +12,18 @@ public class MyMonthlyJob : BaseJob<MyMonthlyJob>, IJob
     private readonly HelloVimService ts;
 
     public MyMonthlyJob(
+            // MyTaskResolver taskResolver,
             ILogger<MyMonthlyJob> logger,
+            IServiceProvider serviceProvider,
             IInteractiveMode im,
             IOptions<AppSetting> configuration,
-            MyTaskResolver taskResolver) : base(logger, im, configuration)
+            [FromKeyedServices(nameof(HelloVimService))] IMyTaskService myTaskService) : base(logger, im, configuration)
     {
-        this.ts = taskResolver(nameof(HelloVimService)) as HelloVimService;
+        // this.ts = serviceProvider.GetKeyedService<IMyTaskService>(nameof(HelloVimService)) as HelloVimService;
+        this.ts = myTaskService as HelloVimService;
+
+        // Old way: use Resolver
+        // this.ts = taskResolver(nameof(HelloVimService)) as HelloVimService;
     }
 
     public async Task Execute(IJobExecutionContext context)
